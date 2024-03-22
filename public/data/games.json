@@ -1,0 +1,90 @@
+[
+      {
+        "title": "Dragon’s Dogma II",
+        
+        "description": "Dragon’s Dogma is a single player, narrative driven action-RPG series that challenges the players to choose their own experience – from the appearance of their Arisen, their vocation, their party, how to approach different situations and more. Now, in this long-awaited sequel, the deep, explorable fantasy world of Dragon’s Dogma 2 awaits. On your journey, you’ll be joined by Pawns, mysterious otherworldly beings, in an adventure so unique you will feel as if accompanied by other players while on your own adventure. All of these elements are elevated further through physics technology, artificial intelligence (AI) and the latest in graphics, to create a truly immersive fantasy world in Dragon’s Dogma 2.",
+        
+        "price": 69.99,
+        "platform": ["Windows", "PlayStation 5", "Xbox Series X/S"],
+        "genre": ["Action role-playing"],
+        "release_dates": "March 22 2024",
+        "image_url": "Dragons Dogma II.jpg"
+      },
+      {
+        "title": "Cyberpunk 2077",
+        "description": "Cyberpunk 2077 is an open-world, action-adventure RPG set in the megalopolis of Night City, where you play as a cyberpunk mercenary wrapped up in a do-or-die fight for survival. Upgraded with next-gen in mind and featuring free additional content, customize your character and playstyle as you take on jobs, build a reputation, and unlock upgrades. The relationships you forge and the choices you make will shape the story and the world around you. Legends are made here. What will yours be?",
+        "price": 49.99,
+        "platform": ["PlayStation 4", "PlayStation 5", "Windows", "Xbox One", "Xbox Series X/S"],
+        "genre": ["Action role-playing"],
+        "release_dates": "December 10 2020",
+        "image_url": "Cyberpunk 2077.jpg"
+      },
+      {
+        "title": "Elden Ring",
+        "description": "Elden Ring is presented through a third-person perspective; players freely roam its interactive open world. The six main areas are traversed using the player character's steed Torrent as the primary mode of travel. Linear, hidden dungeons can be explored to find useful items. Players can use several types of weapons and magic spells, including non-direct engagement enabled by stealth mechanics. Throughout the game's world, checkpoints enable fast travel and allow players to improve their attributes using an in-game currency called runes. Elden Ring features an online multiplayer mode in which players join through cooperative play to fight bosses or engage player-versus-player combat.",
+        "price": 59.99,
+        "platform": ["PlayStation 4", "PlayStation 5", "Windows", "Xbox One", "Xbox Series X/S"],
+        "genre": ["Action role-playing"],
+        "release_dates": "February 25 2022",
+        "image_url": "Elden Ring.jpg"
+      },
+      {
+        "title": "Red Dead Redemption 2",
+        "description": "Red Dead Redemption 2 is an epic tale of life in America’s unforgiving heartland. You play as Arthur Morgan, an outlaw and member of the Van der Linde gang, navigating a world on the brink of change. Explore vast landscapes, engage in gunfights, hunt wildlife, and make choices that impact your honor and fate.",
+        "price": 59.99,
+        "platform": ["PlayStation 4", "PlayStation 5", "Windows", "Xbox One", "Xbox Series X/S"],
+        "genre": ["Action-adventure"],
+        "release_dates": [
+            {
+              "platform": "PlayStation 4",
+              "date": "October 26, 2018"
+            },
+            {
+              "platform": "Xbox One",
+              "date": "October 26, 2018"
+            },
+            {
+              "platform": "Windows",
+              "date": "November 5, 2019"
+            },
+            {
+              "platform": "Stadia",
+              "date": "November 19, 2019"
+            }
+          ],
+        "image_url": "RDR2.jpg"
+      },
+      {
+        "title": "Fall Guys: Ultimate Knockout",
+        "description": "Fall Guys is a whimsical battle royale game where jellybean-like characters compete in obstacle courses, races, and mini-games. Climb, dive, and tumble your way to victory while avoiding hilarious mishaps. It’s a delightful blend of chaos, laughter, and colorful mayhem.",
+        "price": 0.00,
+        "platform": ["PS4", "Windows", "Switch", "PS5", "Xbox One", "Series X/S"],
+        "genre": ["Party", "Battle royale"],
+        "release_dates": [
+          {"platform": "PS4", "date": "August 4, 2020"},
+          {"platform": "Windows", "date": "August 4, 2020"},
+          {"platform": "Switch", "date": "June 21, 2022"},
+          {"platform": "PS5", "date": "June 21, 2022"},
+          {"platform": "Xbox One", "date": "June 21, 2022"},
+          {"platform": "Series X/S", "date": "June 21, 2022"}
+        ],
+        "image_url": "Fallguys.jpg"
+      },
+      {
+        "title": "Counter-Strike 2",
+        "description": "Counter-Strike is a tactical first-person shooter game developed by Valve. It was initially developed and released as a Half-Life modification by Minh 'Gooseman' Le and Jess Cliffe in 1999, before Le and Cliffe were hired and the game's intellectual property acquired.",
+        "price": 14.99,
+        "platform": ["Windows"],
+        "genre": ["Tactical Shooter"],
+        "release_dates": "August 21, 2012",
+        "image_url": "CS2.jpg"
+      },
+      {
+        "title": "Helldivers II",
+        "description": "",
+        "image_url": "helldivers.jpg"
+      }      
+      
+]
+
+  
