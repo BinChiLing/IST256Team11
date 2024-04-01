@@ -66,15 +66,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 
-app.post('/update', (req, res) => {
-
-    const updates = req.body;
-
-
-    res.json({ message: 'Updates saved successfully' });
-});
-
-
 app.use(function(req, res, next) {
   next(createError(404));
 });
