@@ -6,12 +6,15 @@
 
 body {
     font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .container {
     width: 100%;
     height: 100vh;
-    background: #ffffff; 
+    background: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,11 +27,12 @@ body {
     text-align: center;
     background: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
 .form-box h1 {
     font-size: 30px;
-    margin-bottom: 40px; 
+    margin-bottom: 40px;
     color: #df15c4;
     position: relative;
 }
@@ -45,13 +49,17 @@ body {
     transform: translateX(-50%);
 }
 
-/* Input field styling */
 .input-field {
     background: #eaeaea;
     margin: 15px 0;
     border-radius: 3px;
     display: flex;
     align-items: center;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.input-field.show {
+    max-height: 65px;
 }
 
 .input-field input {
@@ -65,12 +73,12 @@ body {
 
 .input-field i {
     margin-left: 15px;
-    color: #999;
+    color: #3c00a0;
 }
 
 form p {
     font-size: 13px;
-    margin-top: 10px; 
+    margin-top: 10px;
 }
 
 form p a {
@@ -81,6 +89,7 @@ form p a {
 .btn-field {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
 }
 
 .btn-field button {
@@ -89,12 +98,16 @@ form p a {
     border-radius: 20px;
     border: 0;
     outline: 0;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    background-color: blueviolet;
+    color: #ffffff;
+}
+
+.btn-field button:hover {
+    background-color: #8a2be2;
 }
 
 .btn-field button.disable {
     background-color: #eaeaea;
     color: #555;
-    cursor: not-allowed; 
 }
