@@ -92,6 +92,31 @@
 
     $.post('/saveUser', {userName:userName, userEmail:userEmail}, displayUsers);
   }
+     function validateForm() {
+            var userName = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var usernameError = document.getElementById("usernameError");
+            var passwordError = document.getElementById("passwordError");
+            var isValid = true;
+
+            
+            if (username.trim() === "") {
+                usernameError.textContent = "Username is required";
+                isValid = false;
+            } else {
+                usernameError.textContent = "";
+            }
+
+            
+            if (password.trim() === "") {
+                passwordError.textContent = "Password is required";
+                isValid = false;
+            } else {
+                passwordError.textContent = "";
+            }
+
+            return isValid;
+        }
 </script>
 
 </body>
