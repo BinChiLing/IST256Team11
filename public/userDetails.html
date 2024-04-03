@@ -66,58 +66,71 @@
   </div>
 
   <div id="userDisplay">
-    <ul id="usersList"></ul>
+    <div id="usersList"></div>
   </div>
 
-<script>
-
-  function displayUsers(){
-    $('#usersList').empty();
-
-    $.get('getUsers', function(users){
-
-      for(let i = 0; i < users.length; i++){
-        const userName = $('<span></span>').text("User Name: " + users[i].split(" ")[0]);
-        const newLi = $('<li></li>').append(userName);
-
-        $('#usersList').append(newLi);
-      }
-
-    })
-  }
-
-  function saveUser(){
-    var userName = $("#userName").val();
-    var userEmail = $("#userEmail").val();
-
-    $.post('/saveUser', {userName:userName, userEmail:userEmail}, displayUsers);
-  }
-     function validateForm() {
-            var userName = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            var usernameError = document.getElementById("usernameError");
-            var passwordError = document.getElementById("passwordError");
-            var isValid = true;
-
-            
-            if (username.trim() === "") {
-                usernameError.textContent = "Username is required";
-                isValid = false;
+  <script>
+    function displayUsers() {
+      $('#usersList').empty();
+    
+      $.get('/getUsers', function(users) {
+        users.forEach(function(user, index) {
+          const userDiv = $('<div></div>').addClass('user-info').attr('data-index', index);
+          const userHeading = $('<h1 id="userHeading"></h1>').text('User ' + (index + 1));
+    
+          // Convert these spans into input fields for inline editing
+          const userNameInput = $('<input type="text" readonly />').val(user.userName).addClass('user-name');
+          const userEmailInput = $('<input type="email" readonly />').val(user.userEmail).addClass('user-email');
+    
+          const updateBtn = $('<button>Update</button>');
+          const deleteBtn = $('<button>Delete</button>');
+    
+          updateBtn.on('click', function() {
+            // Toggle readonly property based on its current state
+            userNameInput.prop('readonly', !userNameInput.prop('readonly'));
+            userEmailInput.prop('readonly', !userEmailInput.prop('readonly'));
+    
+            if (userNameInput.prop('readonly')) {
+              // If switching back to readonly, it means we're saving the data
+              const updatedName = userNameInput.val();
+              const updatedEmail = userEmailInput.val();
+    
+              // AJAX call to update user information
+              $.post('/updateUser', {userName: user.userName, 
+                newUserEmail: updatedEmail, // This is the updated email
+                newUserName: updatedName // Make sure this is supported and correctly processed on the backend
+              }, function(response) {
+                displayUsers(); // Refresh the list to reflect changes
+              });
             } else {
-                usernameError.textContent = "";
+              // If making fields editable, change button text to 'Save'
+              updateBtn.text('Save');
             }
+          });
+    
+          deleteBtn.on('click', function() {
+            $.post('/deleteUser', { userEmail: user.userEmail }, function() {
+              displayUsers(); // Refresh the list
+            });
+          });
+    
+          // Append all elements to the userDiv
+          userDiv.append(userHeading, userNameInput, userEmailInput, updateBtn, deleteBtn, $('<br>'));
+          $('#usersList').append(userDiv);
+        });
+      });
+    }
+    
+    
+    function saveUser(){
+      var userName = $("#userName").val();
+      var userEmail = $("#userEmail").val();
 
-            
-            if (password.trim() === "") {
-                passwordError.textContent = "Password is required";
-                isValid = false;
-            } else {
-                passwordError.textContent = "";
-            }
-
-            return isValid;
-        }
-</script>
+      $.post('/saveUser', {userName: userName, userEmail: userEmail}, displayUsers);
+    }
+    
+    </script>
+    
 
 </body>
 </html>

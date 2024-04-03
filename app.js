@@ -33,32 +33,44 @@ app.get('/getUsers', function(req,res){
 })
 
 app.post('/saveUser', function(req,res){
-  const userName = req.body.userName;
-  const userEmail = req.body.userEmail;
+  const newUser = {
+    userName: req.body.userName,
+    userEmail: req.body.userEmail,
+  };
 
-  users.push(userName);
-  users.push(userEmail);
+  users.push(newUser);
 
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(users));
 })
 
 app.post('/deleteUser', function(req, res){
-  const userToDelete = req.body.user;
-  const indexOfUser = users.indexOf(userToDelete);
+  const userEmail = req.body.userEmail;
+  const indexOfUser = users.findIndex(user => user.userEmail === userEmail)
 
   if(indexOfUser > -1){
-    users = users.splice(indexOfUser, 1);
+    users.splice(indexOfUser, 1);
   }
 
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(users));
 })
 
-app.post('/updateUser', function(req,res){
+app.post('/updateUser', function(req, res) {
+  const oldUserName = req.body.userName; // Original userName before update
+  const newUserEmail = req.body.newUserEmail;
+  const newUserName = req.body.newUserName; // New userName after update
+  const userIndex = users.findIndex(user => user.userName === oldUserName);
+
+  if (userIndex > -1) {
+    users[userIndex].userEmail = newUserEmail;
+    users[userIndex].userName = newUserName; // Update the userName as well
+  }
+
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(users));
-})
+});
+
 
 //End off custom endpoints
 
