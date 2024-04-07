@@ -9,7 +9,13 @@ var fs = require('fs');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var users = [];
+var savedUsers = [];
+
+var MongoClient = require('mongodb').MongoClient;
+
+async function getClient(){
+  return await MongoClient.connect("mongodb://localhost:27017/");
+}
 
 var app = express();
 
@@ -27,21 +33,48 @@ app.use(bodyParser.json());
 
 //Rest endpoints for read, delete, and update
 
-app.get('/getUsers', function(req,res){
+app.get('/getUsers', async function(req,res){
+
+  const dbClient = await getClient();
+
+  var dbo = dbClient.db('gameHubdb');
+
+  var collection = dbo.collection('savedUsers');
+
+  const allInfo = await collection.find().toArray();
+
+  const listFromMongo = [];
+
+  for(let i = 0; i < allInfo.length; i++){
+    listFromMongo.push(allInfo[i].userName);
+    listFromMongo.push(allInfo[i].userEmail);
+    listFromMongo.push(allInfo[i].userPassword);
+  }
+
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify(users));
+  //res.end(JSON.stringify(users));
+  res.end(JSON.stringify(listFromMongo));
 })
 
-app.post('/saveUser', function(req,res){
+app.post('/saveUser', async function(req,res){
   const newUser = {
     userName: req.body.userName,
     userEmail: req.body.userEmail,
+    userPassword: req.body.userPassword
   };
 
-  users.push(newUser);
+  //users.push(newUser);
+
+  const dbClient = await getClient();
+
+  var dbo = dbClient.db('gameHubdb');
+  dbo.collection('savedUsers').insertOne({userName: newUser.userName, userEmail: newUser.userEmail, userPassword: newUser.userPassword}, function(err, res){
+    if(err) throw err
+    dbClient.close();
+  })
 
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify(users));
+  res.end(JSON.stringify(savedUsers));
 })
 
 app.post('/deleteUser', function(req, res){

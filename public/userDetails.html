@@ -125,8 +125,9 @@
     function saveUser(){
       var userName = $("#userName").val();
       var userEmail = $("#userEmail").val();
+      var userPassword = $('#userPassword').val();
 
-      $.post('/saveUser', {userName: userName, userEmail: userEmail}, displayUsers);
+      $.post('/saveUser', { userName: userName, userEmail: userEmail, userPassword: userPassword }, displayUsers);
     }
     
     </script>
