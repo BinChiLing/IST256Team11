@@ -31,9 +31,31 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 
-//Rest endpoints for read, delete, and update
+// Rest endpoints for read, delete, and update
 
-app.get('/getUsers', async function(req,res){
+// Retrieve users from the database
+app.get('/getUsers', async function(req, res) {
+  const dbClient = await getClient();
+  var dbo = dbClient.db('gameHubdb');
+  var collection = dbo.collection('savedUsers');
+
+  const userInfo = await collection.find().toArray();
+  
+  const usersInfoFormatted = userInfo.map(user => ({
+    userName: user.userName,
+    userEmail: user.userEmail,
+    userPassword: user.userPassword
+  }));
+
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(usersInfoFormatted));
+});
+
+
+//Old version of getUsers 
+//DO NOT MODIFY!!!!!!!!!!!!!!
+
+/* app.get('/getUsers', async function(req,res){
 
   const dbClient = await getClient();
 
@@ -54,8 +76,9 @@ app.get('/getUsers', async function(req,res){
   res.setHeader('Content-Type', 'application/json');
   //res.end(JSON.stringify(users));
   res.end(JSON.stringify(listFromMongo));
-})
+}) */
 
+// Save user into the database
 app.post('/saveUser', async function(req,res){
   const newUser = {
     userName: req.body.userName,
@@ -63,12 +86,10 @@ app.post('/saveUser', async function(req,res){
     userPassword: req.body.userPassword
   };
 
-  //users.push(newUser);
-
   const dbClient = await getClient();
 
   var dbo = dbClient.db('gameHubdb');
-  dbo.collection('savedUsers').insertOne({userName: newUser.userName, userEmail: newUser.userEmail, userPassword: newUser.userPassword}, function(err, res){
+  dbo.collection('savedUsers').insertOne(newUser, function(err, res){
     if(err) throw err
     dbClient.close();
   })
@@ -77,9 +98,26 @@ app.post('/saveUser', async function(req,res){
   res.end(JSON.stringify(savedUsers));
 })
 
-app.post('/deleteUser', function(req, res){
+// Delete information that user entered
+
+app.post('/deleteUser', async function(req, res) {
   const userEmail = req.body.userEmail;
-  const indexOfUser = users.findIndex(user => user.userEmail === userEmail)
+  const dbClient = await getClient();
+  const dbo = dbClient.db('gameHubdb');
+  dbo.collection('savedUsers').deleteOne({ userEmail: userEmail }, function(err, result) {
+    if (err) throw err;
+    dbClient.close();
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ status: 'success' }));
+  });
+});
+
+
+
+
+/* app.post('/deleteUser', function(req, res){
+  const userName = req.body.userName;
+  const indexOfUser = users.findIndex(user => user.userName === userName);
 
   if(indexOfUser > -1){
     users.splice(indexOfUser, 1);
@@ -88,7 +126,8 @@ app.post('/deleteUser', function(req, res){
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(users));
 })
-
+ */
+// Update information that user entered
 app.post('/updateUser', function(req, res) {
   const oldUserName = req.body.userName; // Original userName before update
   const newUserEmail = req.body.newUserEmail;
