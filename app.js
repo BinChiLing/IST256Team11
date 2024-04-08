@@ -63,34 +63,6 @@ app.post('/saveUser', async function(req,res){
     userPassword: req.body.userPassword
   };
 
-
-  //Get user by email end point
-
-  app.get('/getUserByEmail/:email', async function(req, res){
-    const userEmail = req.paramas.userEmail;
-    const dbClient = await getClient;
-    const dbo = dbClient.db('gameHubdb');
-    const collection = dbo.collection('savedUsers');
-    const userInfo = await collection.findOne({userEmail: userEmail});
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(listFromMongo));
-});
-
-
-
-//Count Users end point
-
-app.get('/countUsers', async function(req, res) {
-  const dbClient = await getClient();
-  const dbo = dbClient.db('gameHubdb');
-  const collection = dbo.collection('savedUsers');
-  const count = await collection.countDocuments();
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ count: count }));
-});
-
-
-
   //users.push(newUser);
 
   const dbClient = await getClient();
