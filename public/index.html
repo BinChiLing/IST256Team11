@@ -10,55 +10,127 @@
     <link rel="stylesheet" href="stylesheets/style.css">
 
     <style>
-      body{
-        background-color: #B6B6B6;
-      }
+        body {
+            background-color: #B6B6B6;
+        }
 
-      #gamepad{
-        height: 40px;
-        width: auto;
-        margin-right: 10px;
-      }
+        #gamepad {
+            height: 40px;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .game-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-box {
+            display: none;
+            text-align: center;
+            flex: 0 0 auto;
+            width: 400px;
+            height: auto;
+        }
+
+        .game-box.active {
+            display: block;
+            max-width: 100%;
+        }
+
+        .slider-arrow {
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .slider-arrow-left {
+            left: 10px;
+        }
+
+        .slider-arrow-right {
+            right: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="title">
-      <img id="gamepad" src="images/gamepad.png">
-      <h1>GameHub Inc.</h1>
+        <img id="gamepad" src="images/gamepad.png">
+        <h1>GameHub Inc.</h1>
     </div>
 
     <nav class="navbar bg-dark border-bottom border-body justify-content-center" data-bs-theme="dark">
         <ul class="nav nav-pills">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html">GameHub</a>
+                <a class="nav-link active" aria-current="page" href="index.html">GameHub</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="searchGames.html">Search Games</a>
+                <a class="nav-link" href="searchGames.html">Search Games</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="userDetails.html">Sign in / Sign up</a>
+                <a class="nav-link" href="userDetails.html">Sign in / Sign up</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="userLocation.html">User Location</a>
+                <a class="nav-link" href="userLocation.html">User Location</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="userSummary.html">Account Summary</a>
+                <a class="nav-link" href="userSummary.html">Account Summary</a>
             </li>
         </ul>
     </nav>
 
     <div class="game-slider">
-      <div class="slider-arrow-left"> < </div>
-      
-      <div class="slider-content">
-        
-        <div class="game-box">
-          <img src="images/Games/CS2.jpg" alt="game image">
+        <div class="game-box active">
+            <img src="images/Games/CS2.jpg" alt="Counter-Strike 2">
         </div>
-      
+        <div class="game-box">
+            <img src="images/Games/Cyberpunk 2077.jpg" alt="Cyberpunk 2077">
+        </div>
+        <div class="game-box">
+            <img src="images/Games/Dragons Dogma II.jpg" alt="Dragons Dogma II">
+        </div>
+        <div class="game-box">
+          <img src="images/Games/Elden Ring.jpg" alt="Elden Ring">
       </div>
-      
-      <div class="slider-arrow-right"> > </div>
+      <div class="game-box">
+        <img src="images/Games/Fallguys.jpg" alt="Fallguys">
     </div>
+    <div class="game-box">
+      <img src="images/Games/helldivers.jpg" alt="helldivers.jpg">
+  </div>
+  <div class="game-box">
+    <img src="images/Games/RDR2.jpg" alt="RDR2.jpg">
+</div>
+
+        <div class="slider-arrow slider-arrow-left" onclick="moveSlider('left')">◄</div>
+        <div class="slider-arrow slider-arrow-right" onclick="moveSlider('right')">►</div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const gameBoxes = document.querySelectorAll('.game-box');
+
+        function moveSlider(direction) {
+            gameBoxes[currentIndex].classList.remove('active');
+
+            if (direction === 'left') {
+                currentIndex = (currentIndex - 1 + gameBoxes.length) % gameBoxes.length;
+            } else if (direction === 'right') {
+                currentIndex = (currentIndex + 1) % gameBoxes.length;
+            }
+
+            gameBoxes[currentIndex].classList.add('active');
+        }
+    </script>
 </body>
 </html>
