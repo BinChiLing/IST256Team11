@@ -52,8 +52,8 @@ app.get('/getUsers', async function(req, res) {
 });
 
 
-//Old version of getUsers 
-//DO NOT MODIFY!!!!!!!!!!!!!!
+
+
 
 /* app.get('/getUsers', async function(req,res){
 
