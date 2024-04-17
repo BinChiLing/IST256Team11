@@ -66,69 +66,79 @@
   </div>
 
   <div id="userDisplay">
-    <div id="usersList"></div>
+    <ul id="usersList"></ul>
   </div>
 
   <script>
+    //function to display users
+
+
     function displayUsers() {
       $('#usersList').empty();
-    
+
       $.get('/getUsers', function(users) {
-        users.forEach(function(user, index) {
-          const userDiv = $('<div></div>').addClass('user-info').attr('data-index', index);
-          const userHeading = $('<h1 id="userHeading"></h1>').text('User ' + (index + 1));
-    
-          // Convert these spans into input fields for inline editing
-          const userNameInput = $('<input type="text" readonly />').val(user.userName).addClass('user-name');
-          const userEmailInput = $('<input type="email" readonly />').val(user.userEmail).addClass('user-email');
-    
-          const updateBtn = $('<button>Update</button>');
-          const deleteBtn = $('<button>Delete</button>');
-    
-          updateBtn.on('click', function() {
-            // Toggle readonly property based on its current state
-            userNameInput.prop('readonly', !userNameInput.prop('readonly'));
-            userEmailInput.prop('readonly', !userEmailInput.prop('readonly'));
-    
-            if (userNameInput.prop('readonly')) {
-              // If switching back to readonly, it means we're saving the data
-              const updatedName = userNameInput.val();
-              const updatedEmail = userEmailInput.val();
-    
-              // AJAX call to update user information
-              $.post('/updateUser', {userName: user.userName, 
-                newUserEmail: updatedEmail, // This is the updated email
-                newUserName: updatedName // Make sure this is supported and correctly processed on the backend
-              }, function(response) {
-                displayUsers(); // Refresh the list to reflect changes
-              });
-            } else {
-              // If making fields editable, change button text to 'Save'
-              updateBtn.text('Save');
-            }
-          });
-    
-          deleteBtn.on('click', function() {
-            $.post('/deleteUser', { userEmail: user.userEmail }, function() {
-              displayUsers(); // Refresh the list
-            });
-          });
-    
-          // Append all elements to the userDiv
-          userDiv.append(userHeading, userNameInput, userEmailInput, updateBtn, deleteBtn, $('<br>'));
-          $('#usersList').append(userDiv);
-        });
+        for (let i = 0; i < users.length; i++) {
+          // Create a list item for each user
+          const newLi = $('<li></li>');
+
+          // Create and append an input for the userName
+          const userNameInput = $('<input readonly>').val(`Name: ${users[i].userName}`);
+          newLi.append(userNameInput);
+
+          // Create and append an input for the userEmail
+          const userEmailInput = $('<input readonly>').val(`Email: ${users[i].userEmail}`);
+          newLi.append(userEmailInput);
+
+          // Create and append an input for the userPassword
+          const userPasswordInput = $('<input readonly>').val(`Password: ${users[i].userPassword}`);
+          newLi.append(userPasswordInput);
+
+          // Append the list item to the users list
+          $('#usersList').append(newLi);
+        }
       });
     }
-    
-    
-    function saveUser(){
-      var userName = $("#userName").val();
-      var userEmail = $("#userEmail").val();
-      var userPassword = $('#userPassword').val();
 
-      $.post('/saveUser', { userName: userName, userEmail: userEmail, userPassword: userPassword }, displayUsers);
+
+
+/*     function displayUsers(users) {
+
+      $('#usersList').empty()
+
+      $.get('/getUsers', function(users) {
+        for (let i = 0; i < users.length; i++) {
+          const newLi = $('<li></li>');
+          const editInput = $('<input>').val(users[i])
+
+          newLi.append(editInput);
+          $('#usersList').append(newLi)
+        }
+      });
+    } */
+
+
+    function deleteUser(userName){
+      console.log("delete: ", userEmail);
+      $.post('/deleteUser', { userEmail: userEmail }, displayUsers);
     }
+
+    function saveUser() {
+        var userName = $("#userName").val();
+        var userEmail = $("#userEmail").val();
+        var userPassword = $('#userPassword').val();
+
+        // Basic validation to check if any field is empty
+        if (!userName || !userEmail || !userPassword) {
+            alert("All fields are required!");
+            return; // Stop execution if any field is empty
+        }
+        $.post('/saveUser', { userName: userName, userEmail: userEmail, userPassword: userPassword }, displayUsers);
+    }
+
+
+    $(document).ready(function(){
+      displayUsers([]);
+    })
     
     </script>
     
