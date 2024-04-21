@@ -14,134 +14,93 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-  <header>
-      <h1>Sign in</h1>
-  </header>
-  <nav class="navbar bg-dark border-bottom border-body justify-content-center" data-bs-theme="dark">
-      <ul class="nav nav-pills">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="index.html">GameHub</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="searchGames.html">Search Games</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="userDetails.html">Sign in / Sign up</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="userLocation.html">User Location</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="userSummary.html">Account Summary</a>
-          </li>
+    <header>
+        <h1>Sign in</h1>
+    </header>
+    <nav class="navbar bg-dark border-bottom border-body justify-content-center" data-bs-theme="dark">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html">GameHub</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="searchGames.html">Search Games</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="userDetails.html">Sign in / Sign up</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="userLocation.html">User Location</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="userSummary.html">Account Summary</a>
+            </li>
         </ul>
     </nav>
-
-  <div class="container">
-    <div class="form-box">
-      <h1 id="title">Sign Up</h1>
-      <form>
-        <div class="input-group">
-          <div class="input-field" id="nameField">
-            <i class="fa-solid fa-user"></i>
-            <input type="text" placeholder="Name" id="userName">
-            </div>
-
-            <div class="input-field">
-              <i class="fa-solid fa-envelope"></i>
-              <input type="email" placeholder="email" id="userEmail">
-              </div>
-
-              <div class="input-field">
-                <i class="fa-solid fa-user"></i>
-                <input type="password" placeholder="password" id="userPassword">
+    <div class="container">
+        <div class="form-box">
+            <h1 id="title">Update User Information</h1>
+            <form>
+                <div class="input-group">
+                    <div class="input-field" id="nameField">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="New Name" id="newUserName">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" placeholder="New Email" id="newUserEmail">
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="password" placeholder="New Password" id="newUserPassword">
+                    </div>
+                    <p>Lost password <a href="#">Click Here!</a></p>
                 </div>
-                <p>Lost password <a href="#">Click Here!</a></p>
-              </div>
-              <div class="btn-field">
-                <button type="button" id="saveBtn" onclick="saveUser()">Save</button>
-              </div>
-      </form>
+                <div class="btn-field">
+                    <button type="button" id="updateBtn" onclick="updateUser()">Update</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-
-  <div id="userDisplay">
-    <ul id="usersList"></ul>
-  </div>
-
-  <script>
-    //function to display users
-
-
-    function displayUsers() {
-      $('#usersList').empty();
-
-      $.get('/getUsers', function(users) {
-        for (let i = 0; i < users.length; i++) {
-          // Create a list item for each user
-          const newLi = $('<li></li>');
-
-          // Create and append an input for the userName
-          const userNameInput = $('<input readonly>').val(`Name: ${users[i].userName}`);
-          newLi.append(userNameInput);
-
-          // Create and append an input for the userEmail
-          const userEmailInput = $('<input readonly>').val(`Email: ${users[i].userEmail}`);
-          newLi.append(userEmailInput);
-
-          // Create and append an input for the userPassword
-          const userPasswordInput = $('<input readonly>').val(`Password: ${users[i].userPassword}`);
-          newLi.append(userPasswordInput);
-
-          // Append the list item to the users list
-          $('#usersList').append(newLi);
+    <div id="userDisplay">
+        <ul id="usersList"></ul>
+    </div>
+    <script>
+        function displayUsers() {
+            $('#usersList').empty();
+            $.get('/getUsers', function(users) {
+                for (let i = 0; i < users.length; i++) {
+                    const newLi = $('<li></li>');
+                    const userNameInput = $('<input readonly>').val(`Name: ${users[i].userName}`);
+                    newLi.append(userNameInput);
+                    const userEmailInput = $('<input readonly>').val(`Email: ${users[i].userEmail}`);
+                    newLi.append(userEmailInput);
+                    const userPasswordInput = $('<input readonly>').val(`Password: ${users[i].userPassword}`);
+                    newLi.append(userPasswordInput);
+                    $('#usersList').append(newLi);
+                }
+            });
         }
-      });
-    }
-
-
-
-/*     function displayUsers(users) {
-
-      $('#usersList').empty()
-
-      $.get('/getUsers', function(users) {
-        for (let i = 0; i < users.length; i++) {
-          const newLi = $('<li></li>');
-          const editInput = $('<input>').val(users[i])
-
-          newLi.append(editInput);
-          $('#usersList').append(newLi)
+        function updateUser() {
+            var newUserName = $("#newUserName").val();
+            var newUserEmail = $("#newUserEmail").val();
+            var newUserPassword = $('#newUserPassword').val();
+            if (!newUserName || !newUserEmail || !newUserPassword) {
+                alert("All fields are required!");
+                return;
+            }
+            $.post('/updateUser', { newUserName: newUserName, newUserEmail: newUserEmail, newUserPassword: newUserPassword }, function(response) {
+                console.log(response);
+                if (response.success) {
+                    alert("User information updated successfully!");
+                    displayUsers();
+                } else {
+                    alert("Failed to update user information.");
+                }
+            });
         }
-      });
-    } */
-
-
-    function deleteUser(userName){
-      console.log("delete: ", userEmail);
-      $.post('/deleteUser', { userEmail: userEmail }, displayUsers);
-    }
-
-    function saveUser() {
-        var userName = $("#userName").val();
-        var userEmail = $("#userEmail").val();
-        var userPassword = $('#userPassword').val();
-
-        // Basic validation to check if any field is empty
-        if (!userName || !userEmail || !userPassword) {
-            alert("All fields are required!");
-            return; // Stop execution if any field is empty
-        }
-        $.post('/saveUser', { userName: userName, userEmail: userEmail, userPassword: userPassword }, displayUsers);
-    }
-
-
-    $(document).ready(function(){
-      displayUsers([]);
-    })
-    
+        $(document).ready(function() {
+            displayUsers([]);
+        });
     </script>
-    
-
 </body>
 </html>
