@@ -123,24 +123,21 @@ app.post('/deleteUser', async function(req, res) {
   });
 });
 
+
 // Update information that user entered
-app.post('/updateUser', async function(req, res) {
+app.post('/updateUser', function(req, res) {
   const oldUserName = req.body.userName; // Original userName before update
   const newUserEmail = req.body.newUserEmail;
   const newUserName = req.body.newUserName; // New userName after update
+  const userIndex = users.findIndex(user => user.userName === oldUserName);
 
-  const dbClient = await getClient();
-  const dbo = dbClient.db('gameHubdb');
-  dbo.collection('savedUsers').updateOne(
-    { userName: oldUserName },
-    { $set: { userEmail: newUserEmail, userName: newUserName } },
-    function(err, result) {
-      if (err) throw err;
-      dbClient.close();
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ status: 'success' }));
-    }
-  );
+  if (userIndex > -1) {
+    users[userIndex].userEmail = newUserEmail;
+    users[userIndex].userName = newUserName; // Update the userName as well
+  }
+
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(users));
 });
 
 
