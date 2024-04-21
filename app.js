@@ -52,33 +52,6 @@ app.get('/getUsers', async function(req, res) {
 });
 
 
-
-//Old version of getUsers 
-//DO NOT MODIFY!!!!!!!!!!!!!!
-
-/* app.get('/getUsers', async function(req,res){
-
-  const dbClient = await getClient();
-
-  var dbo = dbClient.db('gameHubdb');
-
-  var collection = dbo.collection('savedUsers');
-
-  const allInfo = await collection.find().toArray();
-
-  const listFromMongo = [];
-
-  for(let i = 0; i < allInfo.length; i++){
-    listFromMongo.push(allInfo[i].userName);
-    listFromMongo.push(allInfo[i].userEmail);
-    listFromMongo.push(allInfo[i].userPassword);
-  }
-
-  res.setHeader('Content-Type', 'application/json');
-  //res.end(JSON.stringify(users));
-  res.end(JSON.stringify(listFromMongo));
-}) */
-
 // Save user into the database
 app.post('/saveUser', async function(req,res){
   const newUser = {
@@ -113,39 +86,27 @@ app.post('/deleteUser', async function(req, res) {
   });
 });
 
-
-
-
-/* app.post('/deleteUser', function(req, res){
-  const userName = req.body.userName;
-  const indexOfUser = users.findIndex(user => user.userName === userName);
-
-  if(indexOfUser > -1){
-    users.splice(indexOfUser, 1);
-  }
-
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify(users));
-})
- */
 // Update information that user entered
-app.post('/updateUser', function(req, res) {
+app.post('/updateUser', async function(req, res) {
   const oldUserName = req.body.userName; // Original userName before update
   const newUserEmail = req.body.newUserEmail;
   const newUserName = req.body.newUserName; // New userName after update
-  const userIndex = users.findIndex(user => user.userName === oldUserName);
 
-  if (userIndex > -1) {
-    users[userIndex].userEmail = newUserEmail;
-    users[userIndex].userName = newUserName; // Update the userName as well
-  }
-
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify(users));
+  const dbClient = await getClient();
+  const dbo = dbClient.db('gameHubdb');
+  dbo.collection('savedUsers').updateOne(
+    { userName: oldUserName },
+    { $set: { userEmail: newUserEmail, userName: newUserName } },
+    function(err, result) {
+      if (err) throw err;
+      dbClient.close();
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ status: 'success' }));
+    }
+  );
 });
 
-
-//End off custom endpoints
+// End off custom endpoints
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
