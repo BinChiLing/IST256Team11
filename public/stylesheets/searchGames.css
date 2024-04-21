@@ -6,6 +6,15 @@
 
 #searchForm {
     margin-bottom: 20px;
+    justify-content: center;
+}
+
+#searchResults{
+    width: 50%;
+}
+
+#searchInput{
+    width: 50%;
 }
 
 #games {
@@ -71,5 +80,9 @@
 .game-card:hover .game-cover {
     opacity: 1;
     backdrop-filter: blur(10);
+}
+
+.nav-link{
+    color: #df15c4;
 }
 

@@ -33,6 +33,44 @@ app.use(bodyParser.json());
 
 // Rest endpoints for read, delete, and update
 
+
+// Endpoint to update user location
+app.post('/updateUserLocation', async function(req, res) {
+  console.log('Received data: ', req.body);
+  
+  const username = req.body.userName;
+  const password = req.body.userPassword;
+  const city = req.body.city;
+  const state = req.body.state;
+  const zip = req.body.zip;
+
+  try {
+      const dbClient = await getClient();
+      const dbo = dbClient.db('gameHubdb');
+
+      const result = await dbo.collection('savedUsers').updateOne(
+          { userName: username, userPassword: password },
+          { $set: { city: city, state: state, zip: zip } }
+      );
+
+      dbClient.close();
+
+      if (result.modifiedCount === 0) {
+          res.status(404).json({ status: 'error', message: 'User not found' });
+      } else {
+          res.json({ status: 'success', updated: result.modifiedCount });
+      }
+  } catch (err) {
+      console.error('Error: ', err);
+      res.status(500).json({ status: 'error', message: err.message });
+  }
+});
+
+
+
+
+
+
 // Retrieve users from the database
 app.get('/getUsers', async function(req, res) {
   const dbClient = await getClient();
@@ -50,34 +88,6 @@ app.get('/getUsers', async function(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(usersInfoFormatted));
 });
-
-
-
-//Old version of getUsers 
-//DO NOT MODIFY!!!!!!!!!!!!!!
-
-/* app.get('/getUsers', async function(req,res){
-
-  const dbClient = await getClient();
-
-  var dbo = dbClient.db('gameHubdb');
-
-  var collection = dbo.collection('savedUsers');
-
-  const allInfo = await collection.find().toArray();
-
-  const listFromMongo = [];
-
-  for(let i = 0; i < allInfo.length; i++){
-    listFromMongo.push(allInfo[i].userName);
-    listFromMongo.push(allInfo[i].userEmail);
-    listFromMongo.push(allInfo[i].userPassword);
-  }
-
-  res.setHeader('Content-Type', 'application/json');
-  //res.end(JSON.stringify(users));
-  res.end(JSON.stringify(listFromMongo));
-}) */
 
 // Save user into the database
 app.post('/saveUser', async function(req,res){
@@ -114,20 +124,6 @@ app.post('/deleteUser', async function(req, res) {
 });
 
 
-
-
-/* app.post('/deleteUser', function(req, res){
-  const userName = req.body.userName;
-  const indexOfUser = users.findIndex(user => user.userName === userName);
-
-  if(indexOfUser > -1){
-    users.splice(indexOfUser, 1);
-  }
-
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify(users));
-})
- */
 // Update information that user entered
 app.post('/updateUser', function(req, res) {
   const oldUserName = req.body.userName; // Original userName before update
@@ -145,7 +141,7 @@ app.post('/updateUser', function(req, res) {
 });
 
 
-//End off custom endpoints
+//End of custom endpoints
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

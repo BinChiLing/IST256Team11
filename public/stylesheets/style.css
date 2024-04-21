@@ -2,10 +2,15 @@ body{
   background-color: #B6B6B6;
 }
 
+nav{
+  border-radius: 0px 0px 10px 10px;
+  box-shadow: 3px 1px 5px;
+}
+
+
+
 .title {
-  background-color: #ffffff; 
-  color: #000000; 
-  padding: 10px;
+  color: #fff; 
   align-items: center;
   display: flex;
   justify-content: center;
