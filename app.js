@@ -33,6 +33,29 @@ app.use(bodyParser.json());
 
 // Rest endpoints for read, delete, and update
 
+//endpoint for delete
+app.post('/deleteUser', async function(req, res) {
+  const username = req.body.username; // Username of the user to be deleted
+
+  try {
+    const dbClient = await getClient();
+    const dbo = dbClient.db('gameHubdb');
+    
+    // Delete the user based on the username
+    const result = await dbo.collection('savedUsers').deleteOne({ userName: username });
+
+    dbClient.close();
+
+    if (result.deletedCount === 1) {
+      res.json({ status: 'success', message: 'User deleted successfully' });
+    } else {
+      res.status(404).json({ status: 'error', message: 'User not found' });
+    }
+  } catch (err) {
+    console.error('Error: ', err);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+});
 
 // Endpoint to update user location
 app.post('/updateUserLocation', async function(req, res) {
