@@ -67,7 +67,26 @@ app.post('/updateUserLocation', async function(req, res) {
 });
 
 
+//Endpoint to get user information
+app.post('/getUserInfo', async function(req, res) {
+  const { username, password } = req.body;
+  try {
+      const dbClient = await getClient();
+      const dbo = dbClient.db('gameHubdb');
+      const user = await dbo.collection('savedUsers').findOne({ userName: username, userPassword: password }, { projection: { userPassword: 0 } });
 
+      dbClient.close();
+
+      if (user) {
+          res.json(user);
+      } else {
+          res.status(404).json({ status: 'error', message: 'No user found or incorrect credentials' });
+      }
+  } catch (err) {
+      console.error('Error: ', err);
+      res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+});
 
 
 
